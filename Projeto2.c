@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 typedef struct item
 {
@@ -54,12 +55,11 @@ void calcula_tempo(struct item vetor[], int tam)
 {
     clock_t t;
     struct item vetor_copia[tam];
+    memcpy(vetor_copia, vetor, tam * sizeof(struct item));
 
     for (int i = 0; i < 3; i++)
     {
         printf("CASO: %d \n", i + 1);
-
-        memcpy(vetor_copia, vetor, tam * sizeof(struct item));
 
         t = clock();
         insertion(vetor_copia, tam);
@@ -69,6 +69,8 @@ void calcula_tempo(struct item vetor[], int tam)
         printf("-----------------------------------------------------------------------------------------------\n");
         printf("Tempo de execucao da funcao insertion: %f segundos\n", tempoDeExecucao);
         printf("-----------------------------------------------------------------------------------------------\n");
+
+        preencher_aleatorio(vetor_copia,tam);
     }
 }
 
@@ -78,7 +80,7 @@ int escolha;
 printf("ESCOLHA O METODO DE ORDENACAO:\n");
 
 while (1) {
-        printf("===========================================================\n\t1-Insertion Sort: \n\t2-Merge Sort: \n\t3-Bubble Sort: \n\t4-Quick Sort: \n\t5-Shell Sort: \n\t6-Outro: \n7-Sair do programa:\n===========================================================\n");
+        printf("===========================================================\n\t1-Insertion Sort: \n\t2-Merge Sort: \n\t3-Bubble Sort: \n\t4-Quick Sort: \n\t5-Shell Sort: \n\t6-Odd Even: \n7-Sair do programa:\n===========================================================\n");
         printf("O que deseja fazer: ");
         scanf("%d", &escolha);
         system("cls");
