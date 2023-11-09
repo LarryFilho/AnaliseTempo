@@ -14,13 +14,17 @@ void insertion(struct item vetor[], int tamanho)
 {
     int i, j;
     struct item aux;
+
     for (i = 1; i < tamanho; i++)
     {
-        for (j = i; j > 0 && vetor[j - 1].chave > vetor[j].chave; j--)
+        for (j = i; j > 0; j--)
         {
-            aux = vetor[j - 1];
-            vetor[j - 1] = vetor[j];
-            vetor[j] = aux;
+            if(vetor[j].chave > vetor[j - 1].chave)
+            {
+                aux = vetor[j - 1];
+                vetor[j - 1] = vetor[j];
+                vetor[j] = aux;
+            }
         }
     }
 }
@@ -37,6 +41,7 @@ void ordem_insertion_chave(struct item vetor[], int tamanho)
 
         j=j+10;
     }
+
 }
 
 void preencher_aleatorio(struct item vetor[], int tam)
@@ -59,11 +64,10 @@ double calcula_tempo_insertion(struct item vetor[], int tam)
     t = clock();
     insertion(vetor_copia, tam);
     t = clock() - t;
+
     double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
 
-    printf("-----------------------------------------------------------------------------------------------\n");
-    printf("Tempo de execucao da funcao: %f segundos\n", tempoDeExecucao);
-    printf("-----------------------------------------------------------------------------------------------\n");
+    printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
 
     return tempoDeExecucao;
 }
@@ -71,57 +75,32 @@ double calcula_tempo_insertion(struct item vetor[], int tam)
 int main(){
 
 int escolha;
-double tempo_insertion=0, media_insertion=0;
-printf("ESCOLHA O METODO DE ORDENACAO:\n");
+double tempo_insertion = 0, media_insertion = 0,tempoPiorCaso = 0,mediaPiorCaso = 0;
+
 
 while (1) {
-        printf("===========================================================\n\t1-10 MIL: \n\t2-50 MIL: \n\t3-100 MIL: \n\t4-500 MIL: \n\t5-1 MILHAO: \n\t===========================================================\n");
+
+        system("cls");
+        printf("Escolha o tamanho do vetor:\n");
+        printf("_____________________________________________________________\n\t1-10 MIL: \n\t2-50 MIL: \n\t3-100 MIL: \n\t4-500 MIL: \n\t5-1 MILHAO: \n\t____________________________________________________________\n");
         printf("O que deseja fazer: ");
         scanf("%d", &escolha);
         system("cls");
         switch (escolha)
         {
             case 1:
+                printf("Vetores de 10 mil posicoes com chaves aleatorias: \n");
+
                 for(int i=0; i < 10; i++)
                 {
 
-                    struct item* vetor = (struct item*)malloc(100 * sizeof(struct item));
+                    struct item* vetor = (struct item*)malloc(10000 * sizeof(struct item));
 
-                    preencher_aleatorio(vetor,100);
+                    preencher_aleatorio(vetor,10000);
 
-                    printf("VETOR DE 10 MIL POSICOES DO TIPO 1 (TANTO CHAVE QUANTO NUMERO ALEATORIO)\n");
+                    printf("INSERTION: ");
 
-                    printf("INSERTION: \n");
-
-                    tempo_insertion += calcula_tempo_insertion(vetor,100);
-
-                    /*calcula_tempo_bubble(vetor,10000);
-
-                    calcula_tempo_shell(vetor,10000);
-
-                    calcula_tempo_merge(vetor,10000);
-
-                    calcula_tempo_quick(vetor,10000);
-
-                    calcula_tempo_oddeven(vetor,10000);*/
-
-                    for(int i=0; i < 100; i++)
-                    {
-                        printf("CHAVE: %d     VALOR: %f\n",vetor[i].chave,vetor[i].valor);
-                    }
-
-                    ordem_insertion_chave(vetor,100);
-
-                    for(int i=0; i < 100; i++)
-                    {
-                        printf("CHAVE: %d     VALOR: %f\n",vetor[i].chave,vetor[i].valor);
-                    }
-
-                    printf("VETOR DE 10 MIL POSICOES DO CASO 2 (CHAVE ORDENADA): \n");
-
-                    printf("INSERTION: \n");
-
-                    calcula_tempo_insertion(vetor,100);
+                    tempo_insertion += calcula_tempo_insertion(vetor,10000);
 
                     /*calcula_tempo_bubble(vetor,10000);
 
@@ -135,15 +114,39 @@ while (1) {
 
                     free(vetor);
 
-                    system("pause");
+                }
+                printf("\nVetores de 10 mil posicoes no pior caso: \n");
+                for(int i = 0; i < 10; i++)
+                {
+                    struct item* vetor = (struct item*)malloc(10000 * sizeof(struct item));
+
+                    ordem_insertion_chave(vetor,10000);
+
+                    printf("INSERTION: ");
+
+                    tempoPiorCaso += calcula_tempo_insertion(vetor,10000);
+
+                    /*calcula_tempo_bubble(vetor,10000);
+
+                    calcula_tempo_shell(vetor,10000);
+
+                    calcula_tempo_merge(vetor,10000);
+
+                    calcula_tempo_quick(vetor,10000);
+
+                    calcula_tempo_oddeven(vetor,10000);*/
+
+                    free(vetor);
 
                 }
 
-                media_insertion=tempo_insertion/10;
-
-                printf("-----------------------------------------------------------------------------------------------\n");
-                printf("Tempo medio: %f segundos\n", media_insertion);
-                printf("-----------------------------------------------------------------------------------------------\n");
+                media_insertion = tempo_insertion/10;
+                mediaPiorCaso = tempoPiorCaso/10;
+                printf("_________________________________________________________");
+                printf("\nTempo medio: %f segundos\n", media_insertion);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCaso);
+                printf("_________________________________________________________\n");
+                system("pause");
 
                 break;
             case 2:
