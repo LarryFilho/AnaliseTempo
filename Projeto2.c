@@ -46,13 +46,41 @@ void Bubble(struct item vetor[], int tam)
     }
 }
 
+// Função para realizar a ordenação odd-even
+void OddEven(struct item vetor[], int tam) {
+    struct item aux;
 
+    int troca = 1;  // Flag para verificar se houve trocas
+
+    while (troca) {
+        troca = 0;
+
+        // Fase ímpar (odd)
+        for (int i = 1; i < tam - 1; i += 2) {
+            if (vetor[i].chave < vetor[i + 1].chave) {
+                aux = vetor[i];
+                vetor[i] = vetor[i + 1];
+                vetor[i + 1] = aux;
+                troca = 1;
+            }
+        }
+
+        // Fase par (even)
+        for (int i = 0; i < tam - 1; i += 2) {
+            if (vetor[i].chave < vetor[i + 1].chave) {
+                aux = vetor[i];
+                vetor[i] = vetor[i + 1];
+                vetor[i + 1] = aux;
+                troca = 1;
+            }
+        }
+    }
+}
 
 void ordem_insertion_chave(struct item vetor[], int tamanho)
 {
     srand(time(NULL));
     int i, j=0;
-    struct item aux;
     for (i = 0; i < tamanho; i++)
     {
         vetor[i].chave = rand()%10+j;
@@ -107,11 +135,29 @@ double calcula_tempo_bubble(struct item vetor[], int tam)
     return tempoDeExecucao;
 }
 
+double calcula_tempo_oddeven(struct item vetor[], int tam)
+{
+    clock_t t;
+    struct item vetor_copia[tam];
+    memcpy(vetor_copia, vetor, tam * sizeof(struct item));
+
+    t = clock();
+    OddEven(vetor_copia,tam);
+    t = clock() - t;
+
+    double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
+
+    printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
+
+    return tempoDeExecucao;
+}
+
 int main(){
 
 int escolha;
 double tempo_insertion = 0, media_insertion = 0,tempoPiorCasoInsertion = 0,mediaPiorCasoInsertion = 0;
 double tempoBubble = 0,mediaBubble = 0,tempoPiorCasoBubble = 0,mediaPiorCasoBubble = 0;
+double tempoOD = 0,mediaOD = 0,tempoPiorCasoOD = 0,mediaPiorCasoOD = 0;
 
 while (1) {
 
@@ -144,8 +190,9 @@ while (1) {
                     //calcula_tempo_merge(vetor,10000);
 
                     //calcula_tempo_quick(vetor,10000);
-
-                    //calcula_tempo_oddeven(vetor,10000);
+                    
+                    printf("Odd-Even: ");
+                    tempoOD += calcula_tempo_oddeven(vetor,10000);
 
                     free(vetor);
                     printf("\n");
@@ -167,15 +214,14 @@ while (1) {
                     printf("Bubble: ");
                     tempoPiorCasoBubble += calcula_tempo_bubble(vetor,10000);
 
-                    /*calcula_tempo_bubble(vetor,10000);
+                    //calcula_tempo_shell(vetor,10000);
 
-                    calcula_tempo_shell(vetor,10000);
+                    //calcula_tempo_merge(vetor,10000);
 
-                    calcula_tempo_merge(vetor,10000);
-
-                    calcula_tempo_quick(vetor,10000);
-
-                    calcula_tempo_oddeven(vetor,10000);*/
+                    //calcula_tempo_quick(vetor,10000);
+                    
+                    printf("Odd-Even: ");
+                    tempoPiorCasoOD += calcula_tempo_oddeven(vetor,10000);
 
                     free(vetor);
                     printf("\n");
@@ -186,6 +232,8 @@ while (1) {
                 mediaPiorCasoInsertion = tempoPiorCasoInsertion/10;
                 mediaBubble = tempoBubble/10;
                 mediaPiorCasoBubble = tempoPiorCasoBubble/10;
+                mediaOD = tempoOD/10;
+                mediaPiorCasoOD = tempoPiorCasoOD/10;
                 printf("_________________________________________________________\n");
                 printf("\nInsertion: ");
                 printf("\nTempo medio: %f segundos\n", media_insertion);
@@ -194,6 +242,10 @@ while (1) {
                 printf("\nBubble: ");
                 printf("\nTempo medio: %f segundos\n", mediaBubble);
                 printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoBubble);
+                printf("_________________________________________________________\n");
+                printf("\nOdd-Even: ");
+                printf("\nTempo medio: %f segundos\n", mediaOD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoOD);
                 printf("_________________________________________________________\n");
                 system("pause");
 
