@@ -46,16 +46,16 @@ void Bubble(struct item vetor[], int tam)
     }
 }
 
-// Função para realizar a ordenação odd-even
+
 void OddEven(struct item vetor[], int tam) {
     struct item aux;
 
-    int troca = 1;  // Flag para verificar se houve trocas
+    int troca = 1;
 
     while (troca) {
         troca = 0;
 
-        // Fase ímpar (odd)
+
         for (int i = 1; i < tam - 1; i += 2) {
             if (vetor[i].chave < vetor[i + 1].chave) {
                 aux = vetor[i];
@@ -65,7 +65,7 @@ void OddEven(struct item vetor[], int tam) {
             }
         }
 
-        // Fase par (even)
+
         for (int i = 0; i < tam - 1; i += 2) {
             if (vetor[i].chave < vetor[i + 1].chave) {
                 aux = vetor[i];
@@ -111,7 +111,7 @@ void merge (struct item *v,struct item *c,int i,int m,int f)
     z = i;
     while(iv <= m && ic <= f)
     {
-        if(c[iv].chave <= c[ic].chave)
+        if(c[iv].chave >= c[ic].chave)
         {
             v[z++] = c[iv++];
         }
@@ -119,16 +119,15 @@ void merge (struct item *v,struct item *c,int i,int m,int f)
         {
             v[z++] = c[ic++];
         }
-        while (iv <= m)
-        {
-            v[z++] = c[iv++];
-        }
-        while (ic <= f)
-        {
-            v[z++] = c[ic++];
-        }
     }
-
+    while (iv <= m)
+    {
+        v[z++] = c[iv++];
+    }
+    while (ic <= f)
+    {
+        v[z++] = c[ic++];
+    }
 }
 
 void sort(struct item *v,struct item *c,int i,int f)
@@ -147,19 +146,9 @@ void sort(struct item *v,struct item *c,int i,int f)
 
 void mergesort (struct item *v, int n)
 {
-    for (int i = 0; i < 100; i++)
-    {
-        printf("Numero[%d]: %d\n",i,v[i].chave);
-    }
-    system("pause");
     struct item *c = malloc(sizeof(struct item) * n);
     sort(v, c, 0, n - 1);
     free(c);
-    for (int i = 0; i < 100; i++)
-    {
-        printf("Numero[%d]: %d\n",i,v[i].chave);
-    }
-    system("pause");
 }
 
 double calcula_tempo_insertion(struct item vetor[], int tam)
@@ -235,13 +224,14 @@ int main(){
 int escolha;
 double tempo_insertion = 0, media_insertion = 0,tempoPiorCasoInsertion = 0,mediaPiorCasoInsertion = 0;
 double tempoBubble = 0,mediaBubble = 0,tempoPiorCasoBubble = 0,mediaPiorCasoBubble = 0;
+double tempoMerge = 0,mediaMerge = 0,tempoPiorCasoMerge = 0,mediaPiorCasoMerge = 0;
 double tempoOD = 0,mediaOD = 0,tempoPiorCasoOD = 0,mediaPiorCasoOD = 0;
 
 while (1) {
 
         system("cls");
         printf("Escolha o tamanho do vetor:\n\n");
-        printf("(1)\t10 MIL \n(2)\t50 MIL \n(3)\t100 MIL \n(4)\t500 MIL \n(5)\t1 MILHAO\n\n");
+        printf("(1)\t10 MIL \n(2)\t50 MIL \n(3)\t100 MIL \n(4)\t500 MIL \n(5)\t1 MILHAO\n(6)\tSair do programa\n\n");
         printf("O que deseja fazer: ");
         scanf("%d", &escolha);
         system("cls");
@@ -257,15 +247,16 @@ while (1) {
 
                     preencher_aleatorio(vetor,10000);
 
-                    printf("Insertion: ");
+                    printf("InsertionSort: ");
                     tempo_insertion += calcula_tempo_insertion(vetor,10000);
 
-                    printf("Bubble: ");
+                    printf("BubbleSort: ");
                     tempoBubble += calcula_tempo_bubble(vetor,10000);
 
                     //calcula_tempo_shell(vetor,10000);
 
-                    calcula_tempo_merge(vetor,10000);
+                    printf("MergeSort: ");
+                    tempoMerge += calcula_tempo_merge(vetor,10000);
 
                     //calcula_tempo_quick(vetor,10000);
 
@@ -286,15 +277,16 @@ while (1) {
 
                     ordem_insertion_chave(vetor,10000);
 
-                    printf("Insertion: ");
+                    printf("InsertionSort: ");
                     tempoPiorCasoInsertion += calcula_tempo_insertion(vetor,10000);
 
-                    printf("Bubble: ");
+                    printf("BubbleSort: ");
                     tempoPiorCasoBubble += calcula_tempo_bubble(vetor,10000);
 
                     //calcula_tempo_shell(vetor,10000);
 
-                    //calcula_tempo_merge(vetor,10000);
+                    printf("MergeSort: ");
+                    tempoPiorCasoMerge += calcula_tempo_merge(vetor,10000);
 
                     //calcula_tempo_quick(vetor,10000);
 
@@ -312,6 +304,9 @@ while (1) {
                 mediaPiorCasoBubble = tempoPiorCasoBubble/10;
                 mediaOD = tempoOD/10;
                 mediaPiorCasoOD = tempoPiorCasoOD/10;
+                mediaMerge = tempoMerge/10;
+                mediaPiorCasoMerge = tempoPiorCasoMerge/10;
+
                 printf("_________________________________________________________\n");
                 printf("\nInsertion: ");
                 printf("\nTempo medio: %f segundos\n", media_insertion);
@@ -324,6 +319,10 @@ while (1) {
                 printf("\nOdd-Even: ");
                 printf("\nTempo medio: %f segundos\n", mediaOD);
                 printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoOD);
+                printf("_________________________________________________________\n");
+                printf("\nMergeSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaMerge);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoMerge);
                 printf("_________________________________________________________\n");
                 system("pause");
 
@@ -341,11 +340,9 @@ while (1) {
 
                 break;
             case 6:
-
-                break;
-            case 7:
                 printf("Saindo do programa. Ate logo!\n");
                 return 0;
+                break;
             default:
                 printf("Numero invalido! Digite outro numero: ");
                 }
