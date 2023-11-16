@@ -46,7 +46,7 @@ void Bubble(struct item vetor[], int tam)
     }
 }
 
-// FunÃ§Ã£o para realizar a ordenaÃ§Ã£o odd-even
+// Função para realizar a ordenação odd-even
 void OddEven(struct item vetor[], int tam) {
     struct item aux;
 
@@ -55,7 +55,7 @@ void OddEven(struct item vetor[], int tam) {
     while (troca) {
         troca = 0;
 
-        // Fase Ã­mpar (odd)
+        // Fase ímpar (odd)
         for (int i = 1; i < tam - 1; i += 2) {
             if (vetor[i].chave < vetor[i + 1].chave) {
                 aux = vetor[i];
@@ -99,6 +99,67 @@ void preencher_aleatorio(struct item vetor[], int tam)
         vetor[i].chave = rand();
         vetor[i].valor = ((float)rand() / RAND_MAX) * 900 + 100;
     }
+}
+
+void merge (struct item *v,struct item *c,int i,int m,int f)
+{
+    int z,iv = i,ic = m + 1;
+    for(z = i; z <= f; z++)
+    {
+        c[z] = v[z];
+    }
+    z = i;
+    while(iv <= m && ic <= f)
+    {
+        if(c[iv].chave <= c[ic].chave)
+        {
+            v[z++] = c[iv++];
+        }
+        else
+        {
+            v[z++] = c[ic++];
+        }
+        while (iv <= m)
+        {
+            v[z++] = c[iv++];
+        }
+        while (ic <= f)
+        {
+            v[z++] = c[ic++];
+        }
+    }
+
+}
+
+void sort(struct item *v,struct item *c,int i,int f)
+{
+    if(i < f)
+    {
+        int m = (i + f) / 2;
+        sort(v,c,i,m);
+        sort(v,c,m + 1,f);
+        if(v[m].chave > v[m+1].chave)
+        {
+            merge(v,c,i,m,f);
+        }
+    }
+}
+
+void mergesort (struct item *v, int n)
+{
+    for (int i = 0; i < 100; i++)
+    {
+        printf("Numero[%d]: %d\n",i,v[i].chave);
+    }
+    system("pause");
+    struct item *c = malloc(sizeof(struct item) * n);
+    sort(v, c, 0, n - 1);
+    free(c);
+    for (int i = 0; i < 100; i++)
+    {
+        printf("Numero[%d]: %d\n",i,v[i].chave);
+    }
+    system("pause");
 }
 
 double calcula_tempo_insertion(struct item vetor[], int tam)
@@ -152,6 +213,23 @@ double calcula_tempo_oddeven(struct item vetor[], int tam)
     return tempoDeExecucao;
 }
 
+double calcula_tempo_merge(struct item vetor[], int tam)
+{
+    clock_t t;
+    struct item vetor_copia[tam];
+    memcpy(vetor_copia, vetor, tam * sizeof(struct item));
+
+    t = clock();
+    mergesort(vetor_copia, tam);
+    t = clock() - t;
+
+    double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
+
+    printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
+
+    return tempoDeExecucao;
+}
+
 int main(){
 
 int escolha;
@@ -187,10 +265,10 @@ while (1) {
 
                     //calcula_tempo_shell(vetor,10000);
 
-                    //calcula_tempo_merge(vetor,10000);
+                    calcula_tempo_merge(vetor,10000);
 
                     //calcula_tempo_quick(vetor,10000);
-                    
+
                     printf("Odd-Even: ");
                     tempoOD += calcula_tempo_oddeven(vetor,10000);
 
@@ -219,7 +297,7 @@ while (1) {
                     //calcula_tempo_merge(vetor,10000);
 
                     //calcula_tempo_quick(vetor,10000);
-                    
+
                     printf("Odd-Even: ");
                     tempoPiorCasoOD += calcula_tempo_oddeven(vetor,10000);
 
