@@ -46,7 +46,6 @@ void Bubble(struct item vetor[], int tam)
     }
 }
 
-
 void OddEven(struct item vetor[], int tam) {
     struct item aux;
 
@@ -151,6 +150,29 @@ void mergesort (struct item *v, int n)
     free(c);
 }
 
+void shellSort(struct item *v, int n) {
+
+    int i, j;
+    item value;
+
+    int h = 1;
+    while(h < n) {
+        h = 3*h+1;
+    }
+    while (h > 0) {
+        for(i = h; i < n; i++) {
+            value = v[i];
+            j = i;
+            while (j > h-1 && value.chave >= v[j - h].chave) {
+                v[j] = v[j - h];
+                j -=h;
+            }
+            v[j] = value;
+        }
+        h = h/3;
+    }
+}
+
 double calcula_tempo_insertion(struct item vetor[], int tam)
 {
     clock_t t;
@@ -219,6 +241,23 @@ double calcula_tempo_merge(struct item vetor[], int tam)
     return tempoDeExecucao;
 }
 
+double calcula_tempo_shell(struct item vetor[], int tam)
+{
+    clock_t t;
+    struct item vetor_copia[tam];
+    memcpy(vetor_copia, vetor, tam * sizeof(struct item));
+
+    t = clock();
+    shellSort(vetor_copia,tam);
+    t = clock() - t;
+
+    double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
+
+    printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
+
+    return tempoDeExecucao;
+}
+
 int main(){
 
 int escolha;
@@ -226,6 +265,7 @@ double tempo_insertion = 0, media_insertion = 0,tempoPiorCasoInsertion = 0,media
 double tempoBubble = 0,mediaBubble = 0,tempoPiorCasoBubble = 0,mediaPiorCasoBubble = 0;
 double tempoMerge = 0,mediaMerge = 0,tempoPiorCasoMerge = 0,mediaPiorCasoMerge = 0;
 double tempoOD = 0,mediaOD = 0,tempoPiorCasoOD = 0,mediaPiorCasoOD = 0;
+double tempoShell = 0,mediaShell = 0,tempoPiorCasoShell = 0,mediaPiorCasoShell = 0;
 
 while (1) {
 
@@ -253,7 +293,8 @@ while (1) {
                     printf("BubbleSort: ");
                     tempoBubble += calcula_tempo_bubble(vetor,10000);
 
-                    //calcula_tempo_shell(vetor,10000);
+                    printf("ShellSort: ");
+                    tempoShell += calcula_tempo_shell(vetor,10000);
 
                     printf("MergeSort: ");
                     tempoMerge += calcula_tempo_merge(vetor,10000);
@@ -283,7 +324,8 @@ while (1) {
                     printf("BubbleSort: ");
                     tempoPiorCasoBubble += calcula_tempo_bubble(vetor,10000);
 
-                    //calcula_tempo_shell(vetor,10000);
+                    printf("ShellSort: ");
+                    tempoPiorCasoShell += calcula_tempo_shell(vetor,10000);
 
                     printf("MergeSort: ");
                     tempoPiorCasoMerge += calcula_tempo_merge(vetor,10000);
@@ -306,6 +348,8 @@ while (1) {
                 mediaPiorCasoOD = tempoPiorCasoOD/10;
                 mediaMerge = tempoMerge/10;
                 mediaPiorCasoMerge = tempoPiorCasoMerge/10;
+                mediaShell = tempoShell/10;
+                mediaPiorCasoShell = tempoPiorCasoShell/10;
 
                 printf("_________________________________________________________\n");
                 printf("\nInsertion: ");
@@ -323,6 +367,10 @@ while (1) {
                 printf("\nMergeSort: ");
                 printf("\nTempo medio: %f segundos\n", mediaMerge);
                 printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoMerge);
+                printf("_________________________________________________________\n");
+                printf("\nShellSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaShell);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoShell);
                 printf("_________________________________________________________\n");
                 system("pause");
 
@@ -347,5 +395,4 @@ while (1) {
                 printf("Numero invalido! Digite outro numero: ");
                 }
             }
-return 0;
 }
