@@ -173,6 +173,183 @@ void shellSort(struct item *v, int n) {
     }
 }
 
+int particaoEsquerda(struct item *v,int li,int ls)
+{
+    int pivo,e = li,d = ls;
+    struct item aux;
+
+    pivo = v[e].chave;
+    while(e < d)
+    {
+        while((v[e].chave>=pivo)&&(e<ls))
+        {
+            e++;
+        }
+        while((v[d].chave<pivo)&&(d>li))
+        {
+            d--;
+        }
+        if(e<d)
+        {
+            aux = v[e];
+            v[e] = v[d];
+            v[d] = aux;
+        }
+    }
+    aux = v[li];
+    v[li] = v[d];
+    v[d] = aux;
+
+    return d;
+}
+
+void QuickSortEsquerda(struct item *v,int li,int ls)
+{
+    if(li < ls)
+    {
+        int p;
+
+        p = particaoEsquerda(v,li,ls);
+        QuickSortEsquerda(v,li,p - 1);
+        QuickSortEsquerda(v,p+1,ls);
+    }
+}
+
+double calcula_tempo_quickEsquerda(struct item vetor[], int tam)
+{
+    clock_t t;
+    struct item vetor_copia[tam];
+    memcpy(vetor_copia, vetor, tam * sizeof(struct item));
+
+    t = clock();
+    QuickSortEsquerda(vetor_copia,0,tam-1);
+    t = clock() - t;
+
+    double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
+
+    printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
+
+    return tempoDeExecucao;
+}
+
+int particaoDireita(struct item *v,int li,int ls)
+{
+    int pivo,e = li,d = ls;
+    struct item aux;
+
+    pivo = v[d].chave;
+    while(e < d)
+    {
+        while((v[e].chave>=pivo)&&(e<ls))
+        {
+            e++;
+        }
+        while((v[d].chave<pivo)&&(d>li))
+        {
+            d--;
+        }
+        if(e<d)
+        {
+            aux = v[e];
+            v[e] = v[d];
+            v[d] = aux;
+        }
+    }
+    aux = v[li];
+    v[li] = v[d];
+    v[d] = aux;
+
+    return d;
+}
+
+void QuickSortDireita(struct item *v,int li,int ls)
+{
+    if(li < ls)
+    {
+        int p;
+
+        p = particaoEsquerda(v,li,ls);
+        QuickSortDireita(v,li,p - 1);
+        QuickSortDireita(v,p+1,ls);
+    }
+}
+
+double calcula_tempo_quickDireita(struct item vetor[], int tam)
+{
+    clock_t t;
+    struct item vetor_copia[tam];
+    memcpy(vetor_copia, vetor, tam * sizeof(struct item));
+
+    t = clock();
+    QuickSortDireita(vetor_copia,0,tam-1);
+    t = clock() - t;
+
+    double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
+
+    printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
+
+    return tempoDeExecucao;
+}
+
+int particaoMeio(struct item *v,int li,int ls)
+{
+    int pivo,e = li,d = ls;
+    struct item aux;
+
+    pivo = v[e].chave;
+    while(e < d)
+    {
+        while((v[e].chave>=pivo)&&(e<ls))
+        {
+            e++;
+        }
+        while((v[d].chave<pivo)&&(d>li))
+        {
+            d--;
+        }
+        if(e<d)
+        {
+            aux = v[e];
+            v[e] = v[d];
+            v[d] = aux;
+        }
+    }
+    aux = v[li];
+    v[li] = v[d];
+    v[d] = aux;
+
+    return d;
+}
+
+void QuickSortMeio(struct item *v,int li,int ls)
+{
+    if(li < ls)
+    {
+        int p;
+
+        p = particaoMeio(v,li,ls);
+        QuickSortMeio(v,li,p - 1);
+        QuickSortMeio(v,p+1,ls);
+    }
+}
+
+double calcula_tempo_quickMeio(struct item vetor[], int tam)
+{
+    clock_t t;
+    struct item vetor_copia[tam];
+    memcpy(vetor_copia, vetor, tam * sizeof(struct item));
+
+    t = clock();
+    QuickSortMeio(vetor_copia,0,tam-1);
+    t = clock() - t;
+
+    double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
+
+    printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
+
+    return tempoDeExecucao;
+}
+
 double calcula_tempo_insertion(struct item vetor[], int tam)
 {
     clock_t t;
@@ -266,6 +443,9 @@ double tempoBubble = 0,mediaBubble = 0,tempoPiorCasoBubble = 0,mediaPiorCasoBubb
 double tempoMerge = 0,mediaMerge = 0,tempoPiorCasoMerge = 0,mediaPiorCasoMerge = 0;
 double tempoOD = 0,mediaOD = 0,tempoPiorCasoOD = 0,mediaPiorCasoOD = 0;
 double tempoShell = 0,mediaShell = 0,tempoPiorCasoShell = 0,mediaPiorCasoShell = 0;
+double tempoQuickE = 0,mediaQuickE = 0,tempoPiorCasoQuickE = 0,mediaPiorCasoQuickE = 0;
+double tempoQuickD = 0,mediaQuickD = 0,tempoPiorCasoQuickD = 0,mediaPiorCasoQuickD = 0;
+double tempoQuickM = 0,mediaQuickM = 0,tempoPiorCasoQuickM = 0,mediaPiorCasoQuickM = 0;
 
 while (1) {
 
@@ -299,7 +479,15 @@ while (1) {
                     printf("MergeSort: ");
                     tempoMerge += calcula_tempo_merge(vetor,10000);
 
-                    //calcula_tempo_quick(vetor,10000);
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoQuickE += calcula_tempo_quickEsquerda(vetor,10000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoQuickD += calcula_tempo_quickDireita(vetor,10000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoQuickM += calcula_tempo_quickMeio(vetor,10000);
 
                     printf("Odd-Even: ");
                     tempoOD += calcula_tempo_oddeven(vetor,10000);
@@ -330,7 +518,15 @@ while (1) {
                     printf("MergeSort: ");
                     tempoPiorCasoMerge += calcula_tempo_merge(vetor,10000);
 
-                    //calcula_tempo_quick(vetor,10000);
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoPiorCasoQuickE += calcula_tempo_quickEsquerda(vetor,10000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoPiorCasoQuickD += calcula_tempo_quickDireita(vetor,10000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoPiorCasoQuickM += calcula_tempo_quickMeio(vetor,10000);
 
                     printf("Odd-Even: ");
                     tempoPiorCasoOD += calcula_tempo_oddeven(vetor,10000);
@@ -350,6 +546,12 @@ while (1) {
                 mediaPiorCasoMerge = tempoPiorCasoMerge/10;
                 mediaShell = tempoShell/10;
                 mediaPiorCasoShell = tempoPiorCasoShell/10;
+                mediaQuickD = tempoQuickD/10;
+                mediaPiorCasoQuickD = tempoPiorCasoQuickD/10;
+                mediaQuickE = tempoQuickE/10;
+                mediaPiorCasoQuickE = tempoPiorCasoQuickE/10;
+                mediaQuickM = tempoQuickM/10;
+                mediaPiorCasoQuickM = tempoPiorCasoQuickM/10;
 
                 printf("_________________________________________________________\n");
                 printf("\nInsertion: ");
@@ -372,19 +574,547 @@ while (1) {
                 printf("\nTempo medio: %f segundos\n", mediaShell);
                 printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoShell);
                 printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na direita): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickD);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na esquerda): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickE);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickE);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na meio): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickM);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickM);
+                printf("_________________________________________________________\n");
                 system("pause");
 
                 break;
             case 2:
+                printf("Vetores de 50 mil posicoes com chaves aleatorias: \n\n");
+
+                for(int i=0; i < 10; i++)
+                {
+
+                    struct item* vetor = (struct item*)malloc(50000 * sizeof(struct item));
+
+                    preencher_aleatorio(vetor,50000);
+
+                    printf("InsertionSort: ");
+                    tempo_insertion += calcula_tempo_insertion(vetor,50000);
+
+                    printf("BubbleSort: ");
+                    tempoBubble += calcula_tempo_bubble(vetor,50000);
+
+                    printf("ShellSort: ");
+                    tempoShell += calcula_tempo_shell(vetor,50000);
+
+                    printf("MergeSort: ");
+                    tempoMerge += calcula_tempo_merge(vetor,50000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoQuickE += calcula_tempo_quickEsquerda(vetor,50000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoQuickD += calcula_tempo_quickDireita(vetor,50000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoQuickM += calcula_tempo_quickMeio(vetor,50000);
+
+                    printf("Odd-Even: ");
+                    tempoOD += calcula_tempo_oddeven(vetor,50000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                printf("_________________________________________________________\n");
+                printf("\nVetores de 50 mil posicoes no pior caso: \n\n");
+
+                for(int i = 0; i < 10; i++)
+                {
+                    struct item* vetor = (struct item*)malloc(50000 * sizeof(struct item));
+
+                    ordem_insertion_chave(vetor,50000);
+
+                    printf("InsertionSort: ");
+                    tempoPiorCasoInsertion += calcula_tempo_insertion(vetor,50000);
+
+                    printf("BubbleSort: ");
+                    tempoPiorCasoBubble += calcula_tempo_bubble(vetor,50000);
+
+                    printf("ShellSort: ");
+                    tempoPiorCasoShell += calcula_tempo_shell(vetor,50000);
+
+                    printf("MergeSort: ");
+                    tempoPiorCasoMerge += calcula_tempo_merge(vetor,50000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoPiorCasoQuickE += calcula_tempo_quickEsquerda(vetor,50000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoPiorCasoQuickD += calcula_tempo_quickDireita(vetor,50000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoPiorCasoQuickM += calcula_tempo_quickMeio(vetor,50000);
+
+                    printf("Odd-Even: ");
+                    tempoPiorCasoOD += calcula_tempo_oddeven(vetor,50000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                media_insertion = tempo_insertion/10;
+                mediaPiorCasoInsertion = tempoPiorCasoInsertion/10;
+                mediaBubble = tempoBubble/10;
+                mediaPiorCasoBubble = tempoPiorCasoBubble/10;
+                mediaOD = tempoOD/10;
+                mediaPiorCasoOD = tempoPiorCasoOD/10;
+                mediaMerge = tempoMerge/10;
+                mediaPiorCasoMerge = tempoPiorCasoMerge/10;
+                mediaShell = tempoShell/10;
+                mediaPiorCasoShell = tempoPiorCasoShell/10;
+                mediaQuickD = tempoQuickD/10;
+                mediaPiorCasoQuickD = tempoPiorCasoQuickD/10;
+                mediaQuickE = tempoQuickE/10;
+                mediaPiorCasoQuickE = tempoPiorCasoQuickE/10;
+                mediaQuickM = tempoQuickM/10;
+                mediaPiorCasoQuickM = tempoPiorCasoQuickM/10;
+
+                printf("_________________________________________________________\n");
+                printf("\nInsertion: ");
+                printf("\nTempo medio: %f segundos\n", media_insertion);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoInsertion);
+                printf("_________________________________________________________\n");
+                printf("\nBubble: ");
+                printf("\nTempo medio: %f segundos\n", mediaBubble);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoBubble);
+                printf("_________________________________________________________\n");
+                printf("\nOdd-Even: ");
+                printf("\nTempo medio: %f segundos\n", mediaOD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoOD);
+                printf("_________________________________________________________\n");
+                printf("\nMergeSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaMerge);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoMerge);
+                printf("_________________________________________________________\n");
+                printf("\nShellSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaShell);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoShell);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na direita): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickD);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na esquerda): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickE);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickE);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na meio): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickM);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickM);
+                printf("_________________________________________________________\n");
+                system("pause");
 
                 break;
             case 3:
+                printf("Vetores de 100 mil posicoes com chaves aleatorias: \n\n");
+
+                for(int i=0; i < 10; i++)
+                {
+
+                    struct item* vetor = (struct item*)malloc(100000 * sizeof(struct item));
+
+                    preencher_aleatorio(vetor,100000);
+
+                    printf("InsertionSort: ");
+                    tempo_insertion += calcula_tempo_insertion(vetor,100000);
+
+                    printf("BubbleSort: ");
+                    tempoBubble += calcula_tempo_bubble(vetor,100000);
+
+                    printf("ShellSort: ");
+                    tempoShell += calcula_tempo_shell(vetor,100000);
+
+                    printf("MergeSort: ");
+                    tempoMerge += calcula_tempo_merge(vetor,100000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoQuickE += calcula_tempo_quickEsquerda(vetor,100000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoQuickD += calcula_tempo_quickDireita(vetor,100000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoQuickM += calcula_tempo_quickMeio(vetor,100000);
+
+                    printf("Odd-Even: ");
+                    tempoOD += calcula_tempo_oddeven(vetor,100000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                printf("_________________________________________________________\n");
+                printf("\nVetores de 100 mil posicoes no pior caso: \n\n");
+
+                for(int i = 0; i < 10; i++)
+                {
+                    struct item* vetor = (struct item*)malloc(100000 * sizeof(struct item));
+
+                    ordem_insertion_chave(vetor,100000);
+
+                    printf("InsertionSort: ");
+                    tempoPiorCasoInsertion += calcula_tempo_insertion(vetor,100000);
+
+                    printf("BubbleSort: ");
+                    tempoPiorCasoBubble += calcula_tempo_bubble(vetor,100000);
+
+                    printf("ShellSort: ");
+                    tempoPiorCasoShell += calcula_tempo_shell(vetor,100000);
+
+                    printf("MergeSort: ");
+                    tempoPiorCasoMerge += calcula_tempo_merge(vetor,100000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoPiorCasoQuickE += calcula_tempo_quickEsquerda(vetor,100000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoPiorCasoQuickD += calcula_tempo_quickDireita(vetor,100000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoPiorCasoQuickM += calcula_tempo_quickMeio(vetor,100000);
+
+                    printf("Odd-Even: ");
+                    tempoPiorCasoOD += calcula_tempo_oddeven(vetor,100000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                media_insertion = tempo_insertion/10;
+                mediaPiorCasoInsertion = tempoPiorCasoInsertion/10;
+                mediaBubble = tempoBubble/10;
+                mediaPiorCasoBubble = tempoPiorCasoBubble/10;
+                mediaOD = tempoOD/10;
+                mediaPiorCasoOD = tempoPiorCasoOD/10;
+                mediaMerge = tempoMerge/10;
+                mediaPiorCasoMerge = tempoPiorCasoMerge/10;
+                mediaShell = tempoShell/10;
+                mediaPiorCasoShell = tempoPiorCasoShell/10;
+                mediaQuickD = tempoQuickD/10;
+                mediaPiorCasoQuickD = tempoPiorCasoQuickD/10;
+                mediaQuickE = tempoQuickE/10;
+                mediaPiorCasoQuickE = tempoPiorCasoQuickE/10;
+                mediaQuickM = tempoQuickM/10;
+                mediaPiorCasoQuickM = tempoPiorCasoQuickM/10;
+
+                printf("_________________________________________________________\n");
+                printf("\nInsertion: ");
+                printf("\nTempo medio: %f segundos\n", media_insertion);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoInsertion);
+                printf("_________________________________________________________\n");
+                printf("\nBubble: ");
+                printf("\nTempo medio: %f segundos\n", mediaBubble);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoBubble);
+                printf("_________________________________________________________\n");
+                printf("\nOdd-Even: ");
+                printf("\nTempo medio: %f segundos\n", mediaOD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoOD);
+                printf("_________________________________________________________\n");
+                printf("\nMergeSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaMerge);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoMerge);
+                printf("_________________________________________________________\n");
+                printf("\nShellSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaShell);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoShell);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na direita): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickD);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na esquerda): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickE);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickE);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na meio): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickM);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickM);
+                printf("_________________________________________________________\n");
+                system("pause");
 
                 break;
            case 4:
+               printf("Vetores de 500 mil posicoes com chaves aleatorias: \n\n");
+
+                for(int i=0; i < 10; i++)
+                {
+
+                    struct item* vetor = (struct item*)malloc(500000 * sizeof(struct item));
+
+                    preencher_aleatorio(vetor,500000);
+
+                    printf("InsertionSort: ");
+                    tempo_insertion += calcula_tempo_insertion(vetor,500000);
+
+                    printf("BubbleSort: ");
+                    tempoBubble += calcula_tempo_bubble(vetor,500000);
+
+                    printf("ShellSort: ");
+                    tempoShell += calcula_tempo_shell(vetor,500000);
+
+                    printf("MergeSort: ");
+                    tempoMerge += calcula_tempo_merge(vetor,500000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoQuickE += calcula_tempo_quickEsquerda(vetor,500000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoQuickD += calcula_tempo_quickDireita(vetor,500000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoQuickM += calcula_tempo_quickMeio(vetor,500000);
+
+                    printf("Odd-Even: ");
+                    tempoOD += calcula_tempo_oddeven(vetor,500000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                printf("_________________________________________________________\n");
+                printf("\nVetores de 500 mil posicoes no pior caso: \n\n");
+
+                for(int i = 0; i < 10; i++)
+                {
+                    struct item* vetor = (struct item*)malloc(500000 * sizeof(struct item));
+
+                    ordem_insertion_chave(vetor,500000);
+
+                    printf("InsertionSort: ");
+                    tempoPiorCasoInsertion += calcula_tempo_insertion(vetor,500000);
+
+                    printf("BubbleSort: ");
+                    tempoPiorCasoBubble += calcula_tempo_bubble(vetor,500000);
+
+                    printf("ShellSort: ");
+                    tempoPiorCasoShell += calcula_tempo_shell(vetor,500000);
+
+                    printf("MergeSort: ");
+                    tempoPiorCasoMerge += calcula_tempo_merge(vetor,500000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoPiorCasoQuickE += calcula_tempo_quickEsquerda(vetor,500000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoPiorCasoQuickD += calcula_tempo_quickDireita(vetor,500000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoPiorCasoQuickM += calcula_tempo_quickMeio(vetor,500000);
+
+                    printf("Odd-Even: ");
+                    tempoPiorCasoOD += calcula_tempo_oddeven(vetor,500000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                media_insertion = tempo_insertion/10;
+                mediaPiorCasoInsertion = tempoPiorCasoInsertion/10;
+                mediaBubble = tempoBubble/10;
+                mediaPiorCasoBubble = tempoPiorCasoBubble/10;
+                mediaOD = tempoOD/10;
+                mediaPiorCasoOD = tempoPiorCasoOD/10;
+                mediaMerge = tempoMerge/10;
+                mediaPiorCasoMerge = tempoPiorCasoMerge/10;
+                mediaShell = tempoShell/10;
+                mediaPiorCasoShell = tempoPiorCasoShell/10;
+                mediaQuickD = tempoQuickD/10;
+                mediaPiorCasoQuickD = tempoPiorCasoQuickD/10;
+                mediaQuickE = tempoQuickE/10;
+                mediaPiorCasoQuickE = tempoPiorCasoQuickE/10;
+                mediaQuickM = tempoQuickM/10;
+                mediaPiorCasoQuickM = tempoPiorCasoQuickM/10;
+
+                printf("_________________________________________________________\n");
+                printf("\nInsertion: ");
+                printf("\nTempo medio: %f segundos\n", media_insertion);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoInsertion);
+                printf("_________________________________________________________\n");
+                printf("\nBubble: ");
+                printf("\nTempo medio: %f segundos\n", mediaBubble);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoBubble);
+                printf("_________________________________________________________\n");
+                printf("\nOdd-Even: ");
+                printf("\nTempo medio: %f segundos\n", mediaOD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoOD);
+                printf("_________________________________________________________\n");
+                printf("\nMergeSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaMerge);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoMerge);
+                printf("_________________________________________________________\n");
+                printf("\nShellSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaShell);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoShell);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na direita): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickD);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na esquerda): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickE);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickE);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na meio): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickM);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickM);
+                printf("_________________________________________________________\n");
+                system("pause");
 
                 break;
            case 5:
+               printf("Vetores de 1 milhao posicoes com chaves aleatorias: \n\n");
+
+                for(int i=0; i < 10; i++)
+                {
+
+                    struct item* vetor = (struct item*)malloc(1000000 * sizeof(struct item));
+
+                    preencher_aleatorio(vetor,1000000);
+
+                    //printf("InsertionSort: ");
+                    //tempo_insertion += calcula_tempo_insertion(vetor,1000000);
+
+                    //printf("BubbleSort: ");
+                    //tempoBubble += calcula_tempo_bubble(vetor,1000000);
+
+                    //printf("ShellSort: ");
+                    //tempoShell += calcula_tempo_shell(vetor,1000000);
+
+                    //printf("MergeSort: ");
+                    //tempoMerge += calcula_tempo_merge(vetor,1000000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoQuickE += calcula_tempo_quickEsquerda(vetor,1000000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoQuickD += calcula_tempo_quickDireita(vetor,1000000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoQuickM += calcula_tempo_quickMeio(vetor,1000000);
+
+                    //printf("Odd-Even: ");
+                    //tempoOD += calcula_tempo_oddeven(vetor,1000000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                printf("_________________________________________________________\n");
+                printf("\nVetores de 1 milhao posicoes no pior caso: \n\n");
+
+                for(int i = 0; i < 10; i++)
+                {
+                    struct item* vetor = (struct item*)malloc(1000000 * sizeof(struct item));
+
+                    ordem_insertion_chave(vetor,1000000);
+
+                    //printf("InsertionSort: ");
+                    //tempoPiorCasoInsertion += calcula_tempo_insertion(vetor,1000000);
+
+                    //printf("BubbleSort: ");
+                    //tempoPiorCasoBubble += calcula_tempo_bubble(vetor,1000000);
+
+                    //printf("ShellSort: ");
+                    //tempoPiorCasoShell += calcula_tempo_shell(vetor,1000000);
+
+                    //printf("MergeSort: ");
+                    //tempoPiorCasoMerge += calcula_tempo_merge(vetor,1000000);
+
+                    printf("QuickSort (Pivo na esquerda): ");
+                    tempoPiorCasoQuickE += calcula_tempo_quickEsquerda(vetor,1000000);
+
+                    printf("QuickSort (Pivo na direita): ");
+                    tempoPiorCasoQuickD += calcula_tempo_quickDireita(vetor,1000000);
+
+
+                    printf("QuickSort (Pivo na meio): ");
+                    tempoPiorCasoQuickM += calcula_tempo_quickMeio(vetor,1000000);
+
+                    //printf("Odd-Even: ");
+                    //tempoPiorCasoOD += calcula_tempo_oddeven(vetor,1000000);
+
+                    free(vetor);
+                    printf("\n");
+
+                }
+
+                media_insertion = tempo_insertion/10;
+                mediaPiorCasoInsertion = tempoPiorCasoInsertion/10;
+                mediaBubble = tempoBubble/10;
+                mediaPiorCasoBubble = tempoPiorCasoBubble/10;
+                mediaOD = tempoOD/10;
+                mediaPiorCasoOD = tempoPiorCasoOD/10;
+                mediaMerge = tempoMerge/10;
+                mediaPiorCasoMerge = tempoPiorCasoMerge/10;
+                mediaShell = tempoShell/10;
+                mediaPiorCasoShell = tempoPiorCasoShell/10;
+                mediaQuickD = tempoQuickD/10;
+                mediaPiorCasoQuickD = tempoPiorCasoQuickD/10;
+                mediaQuickE = tempoQuickE/10;
+                mediaPiorCasoQuickE = tempoPiorCasoQuickE/10;
+                mediaQuickM = tempoQuickM/10;
+                mediaPiorCasoQuickM = tempoPiorCasoQuickM/10;
+
+                printf("_________________________________________________________\n");
+                printf("\nInsertion: ");
+                printf("\nTempo medio: %f segundos\n", media_insertion);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoInsertion);
+                printf("_________________________________________________________\n");
+                printf("\nBubble: ");
+                printf("\nTempo medio: %f segundos\n", mediaBubble);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoBubble);
+                printf("_________________________________________________________\n");
+                printf("\nOdd-Even: ");
+                printf("\nTempo medio: %f segundos\n", mediaOD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoOD);
+                printf("_________________________________________________________\n");
+                printf("\nMergeSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaMerge);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoMerge);
+                printf("_________________________________________________________\n");
+                printf("\nShellSort: ");
+                printf("\nTempo medio: %f segundos\n", mediaShell);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoShell);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na direita): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickD);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickD);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na esquerda): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickE);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickE);
+                printf("_________________________________________________________\n");
+                printf("\nQuickSort (pivo na meio): ");
+                printf("\nTempo medio: %f segundos\n", mediaQuickM);
+                printf("Tempo medio no pior caso: %f segundos\n", mediaPiorCasoQuickM);
+                printf("_________________________________________________________\n");
+                system("pause");
 
                 break;
             case 6:
