@@ -208,14 +208,14 @@ int particaoD(struct item *v,int li,int ls)
     int pivo,e = li,d = ls;
     struct item aux;
 
-    pivo = v[e].chave;
+    pivo = v[d].chave;
         while(e < d)
         {
-                while((v[e].chave>=pivo)&&(e<ls))
+                while((v[e].chave>pivo)&&(e<ls))
                 {
                     e++;
                 }
-                while((v[d].chave<pivo)&&(d>li))
+                while((v[d].chave<=pivo)&&(d>li))
                 {
                     d--;
                 }
@@ -226,11 +226,11 @@ int particaoD(struct item *v,int li,int ls)
                     v[d] = aux;
                 }
         }
-        aux = v[li];
-        v[li] = v[d];
-        v[d] = aux;
+        aux = v[ls];
+        v[ls] = v[e];
+        v[e] = aux;
 
-        return d;
+        return e;
 }
 
 
@@ -263,6 +263,7 @@ int particaoM(struct item *v,int li,int ls)
         aux = v[m];
         v[m] = v[d];
         v[d] = aux;
+        return d;
     }
     aux = v[m];
     v[m] = v[e];
