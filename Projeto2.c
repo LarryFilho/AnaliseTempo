@@ -173,30 +173,81 @@ void shellSort(struct item *v, int n) {
     }
 }
 
-int particao(struct item *v,int li,int ls,int pivot)
+int particaoE(struct item *v,int li,int ls)
 {
-    int pivo,e = li,d = ls,m = ls/2;
+    int pivo,e = li,d = ls;
     struct item aux;
 
-    if(pivot == 0)
+    pivo = v[e].chave;
+    while(e < d)
     {
-       pivo = v[d].chave;
+            while((v[e].chave>=pivo)&&(e<ls))
+            {
+                e++;
+            }
+            while((v[d].chave<pivo)&&(d>li))
+            {
+                d--;
+            }
+            if(e<d)
+            {
+                aux = v[e];
+                v[e] = v[d];
+                v[d] = aux;
+            }
     }
-    if(pivot == 1)
-    {
-        pivo = v[e].chave;
-    }
-    if(pivot == 2)
-    {
-        pivo = v[m].chave;
-    }
+    aux = v[li];
+    v[li] = v[d];
+    v[d] = aux;
+
+    return d;
+}
+
+int particaoD(struct item *v,int li,int ls)
+{
+    int pivo,e = li,d = ls;
+    struct item aux;
+
+    pivo = v[d].chave;
+        while(e < d)
+        {
+                while((v[e].chave>pivo)&&(e<ls))
+                {
+                    e++;
+                }
+                while((v[d].chave<=pivo)&&(d>li))
+                {
+                    d--;
+                }
+                if(e<d)
+                {
+                    aux = v[e];
+                    v[e] = v[d];
+                    v[d] = aux;
+                }
+        }
+        aux = v[ls];
+        v[ls] = v[e];
+        v[e] = aux;
+
+        return e;
+}
+
+
+int particaoM(struct item *v,int li,int ls)
+{
+    int pivo,e = li,d = ls,m = li + ls/2;
+    struct item aux;
+
+    pivo = v[m].chave;
+
     while(e < d)
     {
         while((v[e].chave>=pivo)&&(e<ls))
         {
             e++;
         }
-        while((v[d].chave<pivo)&&(d>li))
+        while((v[d].chave<=pivo)&&(d>li))
         {
             d--;
         }
@@ -207,40 +258,48 @@ int particao(struct item *v,int li,int ls,int pivot)
             v[d] = aux;
         }
     }
-    aux = v[li];
-    v[li] = v[d];
-    v[d] = aux;
-
-    return d;
+    if(e>m)
+    {
+        aux = v[m];
+        v[m] = v[d];
+        v[d] = aux;
+        return d;
+    }
+    aux = v[m];
+    v[m] = v[e];
+    v[e] = aux;
+    return e;
 }
 
-void QuickSort(struct item *v,int li,int ls,int tipo)
+void QuickSortE(struct item *v,int li,int ls)
 {
     if(li < ls)
     {
-        if(tipo == 1)
-        {
-            int p;
-            p = particao(v,li,ls,1);
-            QuickSort(v,li,p - 1,1);
-            QuickSort(v,p+1,ls,1);
-        }
+        int p;
+        p = particaoE(v,li,ls);
+        QuickSortE(v,li,p - 1);
+        QuickSortE(v,p+1,ls);
+    }
+}
+void QuickSortD(struct item *v,int li,int ls)
+{
+    if(li < ls)
+    {
+        int p;
+        p = particaoD(v,li,ls);
+        QuickSortD(v,li,p - 1);
+        QuickSortD(v,p+1,ls);
+    }
+}
 
-        if(tipo == 0)
-        {
-            int p;
-            p = particao(v,li,ls,0);
-            QuickSort(v,li,p - 1,0);
-            QuickSort(v,p+1,ls,0);
-        }
-
-        if(tipo == 2)
-        {
-            int p;
-            p = particao(v,li,ls,2);
-            QuickSort(v,li,p - 1,2);
-            QuickSort(v,p+1,ls,2);
-        }
+void QuickSortM(struct item *v,int li,int ls)
+{
+    if(li < ls)
+    {
+        int p;
+        p = particaoM(v,li,ls);
+        QuickSortM(v,li,p - 1);
+        QuickSortM(v,p+1,ls);
     }
 }
 
@@ -284,19 +343,19 @@ double calcula_tempo(struct item vetor[], int tam,int escolha)
 
     case 6:
         t = clock();
-        QuickSort(vetor_copia,0,tam-1,0);
+        QuickSortD(vetor_copia,0,tam-1);
         t = clock() - t;
         break;
 
     case 7:
         t = clock();
-        QuickSort(vetor_copia,0,tam-1,1);
+        QuickSortE(vetor_copia,0,tam-1);
         t = clock() - t;
         break;
 
     case 8:
         t = clock();
-        QuickSort(vetor_copia,0,tam-1,2);
+        QuickSortM(vetor_copia,0,tam-1);
         t = clock() - t;
         break;
 
@@ -308,6 +367,8 @@ double calcula_tempo(struct item vetor[], int tam,int escolha)
     double tempoDeExecucao = ((double)t)/CLOCKS_PER_SEC;
 
     printf("Tempo de execucao: %f segundos\n", tempoDeExecucao);
+
+    free(vetor_copia);
 
     return tempoDeExecucao;
 }
@@ -377,17 +438,17 @@ while (1)
 
         preencher_aleatorio(vetor,tam);
 
-        printf("InsertionSort: ");
-        tempo_insertion += calcula_tempo(vetor,tam,5);
+        //printf("InsertionSort: ");
+        //tempo_insertion += calcula_tempo(vetor,tam,5);
 
-        printf("BubbleSort: ");
-        tempoBubble += calcula_tempo(vetor,tam,4);
+        //printf("BubbleSort: ");
+        //tempoBubble += calcula_tempo(vetor,tam,4);
 
-        printf("ShellSort: ");
-        tempoShell += calcula_tempo(vetor,tam,1);
+        //printf("ShellSort: ");
+        //tempoShell += calcula_tempo(vetor,tam,1);
 
-        printf("MergeSort: ");
-        tempoMerge += calcula_tempo(vetor,tam,2);
+        //printf("MergeSort: ");
+        //tempoMerge += calcula_tempo(vetor,tam,2);
 
         printf("QuickSort (Pivo na esquerda): ");
         tempoQuickE += calcula_tempo(vetor,tam,7);
@@ -397,10 +458,10 @@ while (1)
 
 
         printf("QuickSort (Pivo na meio): ");
-        tempoQuickM += calcula_tempo(vetor,tam,8);
+        tempoQuickM += calcula_tempo(vetor,tam,5);
 
-        printf("Odd-Even: ");
-        tempoOD += calcula_tempo(vetor,tam,3);
+        //printf("Odd-Even: ");
+        //tempoOD += calcula_tempo(vetor,tam,3);
 
         free(vetor);
         printf("\n");
@@ -416,17 +477,17 @@ while (1)
 
         ordem_insertion_chave(vetor,tam);
 
-        printf("InsertionSort: ");
-        tempoPiorCasoInsertion += calcula_tempo(vetor,tam,5);
+        //printf("InsertionSort: ");
+        //tempoPiorCasoInsertion += calcula_tempo(vetor,tam,5);
 
-        printf("BubbleSort: ");
-        tempoPiorCasoBubble += calcula_tempo(vetor,tam,4);
+        //printf("BubbleSort: ");
+        //tempoPiorCasoBubble += calcula_tempo(vetor,tam,4);
 
-        printf("ShellSort: ");
-        tempoPiorCasoShell += calcula_tempo(vetor,tam,1);
+        //printf("ShellSort: ");
+        //tempoPiorCasoShell += calcula_tempo(vetor,tam,1);
 
-        printf("MergeSort: ");
-        tempoPiorCasoMerge += calcula_tempo(vetor,tam,2);
+        //printf("MergeSort: ");
+        //tempoPiorCasoMerge += calcula_tempo(vetor,tam,2);
 
         printf("QuickSort (Pivo na esquerda): ");
         tempoPiorCasoQuickE += calcula_tempo(vetor,tam,7);
@@ -436,10 +497,10 @@ while (1)
 
 
         printf("QuickSort (Pivo na meio): ");
-        tempoPiorCasoQuickM += calcula_tempo(vetor,tam,8);
+        tempoPiorCasoQuickM += calcula_tempo(vetor,tam,5);
 
-        printf("Odd-Even: ");
-        tempoPiorCasoOD += calcula_tempo(vetor,tam,3);
+        //printf("Odd-Even: ");
+        //tempoPiorCasoOD += calcula_tempo(vetor,tam,3);
 
         free(vetor);
         printf("\n");
