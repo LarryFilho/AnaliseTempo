@@ -438,17 +438,17 @@ while (1)
 
         preencher_aleatorio(vetor,tam);
 
-        //printf("InsertionSort: ");
-        //tempo_insertion += calcula_tempo(vetor,tam,5);
+        printf("InsertionSort: ");
+        tempo_insertion += calcula_tempo(vetor,tam,5);
 
-        //printf("BubbleSort: ");
-        //tempoBubble += calcula_tempo(vetor,tam,4);
+        printf("BubbleSort: ");
+        tempoBubble += calcula_tempo(vetor,tam,4);
 
-        //printf("ShellSort: ");
-        //tempoShell += calcula_tempo(vetor,tam,1);
+        printf("ShellSort: ");
+        tempoShell += calcula_tempo(vetor,tam,1);
 
-        //printf("MergeSort: ");
-        //tempoMerge += calcula_tempo(vetor,tam,2);
+        printf("MergeSort: ");
+        tempoMerge += calcula_tempo(vetor,tam,2);
 
         printf("QuickSort (Pivo na esquerda): ");
         tempoQuickE += calcula_tempo(vetor,tam,7);
@@ -460,8 +460,8 @@ while (1)
         printf("QuickSort (Pivo na meio): ");
         tempoQuickM += calcula_tempo(vetor,tam,5);
 
-        //printf("Odd-Even: ");
-        //tempoOD += calcula_tempo(vetor,tam,3);
+        printf("Odd-Even: ");
+        tempoOD += calcula_tempo(vetor,tam,3);
 
         free(vetor);
         printf("\n");
@@ -477,17 +477,17 @@ while (1)
 
         ordem_insertion_chave(vetor,tam);
 
-        //printf("InsertionSort: ");
-        //tempoPiorCasoInsertion += calcula_tempo(vetor,tam,5);
+        printf("InsertionSort: ");
+        tempoPiorCasoInsertion += calcula_tempo(vetor,tam,5);
 
-        //printf("BubbleSort: ");
-        //tempoPiorCasoBubble += calcula_tempo(vetor,tam,4);
+        printf("BubbleSort: ");
+        tempoPiorCasoBubble += calcula_tempo(vetor,tam,4);
 
-        //printf("ShellSort: ");
-        //tempoPiorCasoShell += calcula_tempo(vetor,tam,1);
+        printf("ShellSort: ");
+        tempoPiorCasoShell += calcula_tempo(vetor,tam,1);
 
-        //printf("MergeSort: ");
-        //tempoPiorCasoMerge += calcula_tempo(vetor,tam,2);
+        printf("MergeSort: ");
+        tempoPiorCasoMerge += calcula_tempo(vetor,tam,2);
 
         printf("QuickSort (Pivo na esquerda): ");
         tempoPiorCasoQuickE += calcula_tempo(vetor,tam,7);
@@ -499,8 +499,8 @@ while (1)
         printf("QuickSort (Pivo na meio): ");
         tempoPiorCasoQuickM += calcula_tempo(vetor,tam,5);
 
-        //printf("Odd-Even: ");
-        //tempoPiorCasoOD += calcula_tempo(vetor,tam,3);
+        printf("Odd-Even: ");
+        tempoPiorCasoOD += calcula_tempo(vetor,tam,3);
 
         free(vetor);
         printf("\n");
