@@ -1,3 +1,9 @@
+/*
+Para os testes foi utilizada a semente de valor "123321",
+para realizar as mesmas ordenações usadas nas tabelas dos itens 3.2 e 3.3 adicionar nas linhas 88 e 101 o seguinte comando:
+srand(123321);
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
